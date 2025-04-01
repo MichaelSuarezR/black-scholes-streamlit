@@ -37,8 +37,8 @@ val_col1, val_col2 = st.columns(2)
 with val_col1:
     st.markdown(
         f"""
-        <div style="background-color:#c6f6d5; padding:20px; border-radius:8px; text-align:center">
-            <h3 style="margin:0; color:#000000;">CALL Value</h3>
+        <div style="background-color:#c6f6d5; color:#000000; padding:20px; border-radius:8px; text-align:center">
+            <h3 style="margin:0;">CALL Value</h3>
             <h2 style="margin:0; color:#22543d;">${call_price:.2f}</h2>
         </div>
         """,
@@ -48,8 +48,8 @@ with val_col1:
 with val_col2:
     st.markdown(
         f"""
-        <div style="background-color:#fed7d7; padding:20px; border-radius:8px; text-align:center">
-            <h3 style="margin:0; color:#000000;">PUT Value</h3>
+        <div style="background-color:#fed7d7; color:#000000; padding:20px; border-radius:8px; text-align:center">
+            <h3 style="margin:0;">PUT Value</h3>
             <h2 style="margin:0; color:#742a2a;">${put_price:.2f}</h2>
         </div>
         """,
