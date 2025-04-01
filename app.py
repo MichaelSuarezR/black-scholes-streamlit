@@ -8,6 +8,9 @@ from scipy.stats import norm
 st.set_page_config(page_title="Black-Scholes Model", layout="wide")
 
 def black_scholes(S, K, T, r, sigma):
+    if T <= 0 or sigma <= 0:
+        # Fall back to intrinsic value
+        return max(S - K, 0), max(K - S, 0)
     d1 = (np.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * np.sqrt(T))
     d2 = d1 - sigma * np.sqrt(T)
     call = S * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2)
@@ -18,17 +21,20 @@ st.sidebar.title("📊 Black-Scholes Model")
 
 S = st.sidebar.number_input("Current Asset Price", 50.0, 200.0, 100.0)
 K = st.sidebar.number_input("Strike Price", 50.0, 200.0, 100.0)
-T = st.sidebar.number_input("Time to Maturity (Years)", 0.1, 5.0, 1.0)
-sigma = st.sidebar.number_input("Volatility (σ)", 0.01, 1.0, 0.2)
+T = st.sidebar.number_input("Time to Maturity (Years)", 0.0, 5.0, 1.0)
+sigma = st.sidebar.number_input("Volatility (σ)", 0.0, 1.0, 0.2)
 r = st.sidebar.number_input("Risk-Free Interest Rate", 0.0, 0.2, 0.05)
 
 call_price, put_price = black_scholes(S, K, T, r, sigma)
 
 st.title("🧠 Black-Scholes Pricing Model")
+
+if T <= 0 or sigma <= 0:
+    st.warning("T or σ is zero. Using intrinsic value instead.")
 st.markdown(f"**Call Value:** ${call_price:.2f}")
 st.markdown(f"**Put Value:** ${put_price:.2f}")
-st.markdown("---")
 
+st.markdown("---")
 st.subheader("🎯 Options Price - Interactive Heatmap")
 
 st.sidebar.subheader("Heatmap Parameters")
