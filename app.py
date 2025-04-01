@@ -60,8 +60,8 @@ y_step = vol_range[1] - vol_range[0]
 extent = [
     spot_range[0] - x_step / 2,
     spot_range[-1] + x_step / 2,
-    vol_range[0] - y_step / 2,
     vol_range[-1] + y_step / 2,
+    vol_range[0] - y_step / 2
 ]
 
 col1, col2 = st.columns(2)
