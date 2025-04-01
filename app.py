@@ -69,7 +69,7 @@ col1, col2 = st.columns(2)
 with col1:
     st.markdown("#### Call Price Heatmap")
     fig1, ax1 = plt.subplots(figsize=(6, 4))
-    im1 = ax1.imshow(call_matrix, cmap="viridis", aspect="auto", extent=extent, origin="lower")
+    im1 = ax1.imshow(call_matrix, cmap="viridis", aspect="auto", extent=extent, origin="upper")
     plt.colorbar(im1, ax=ax1)
     ax1.set_xlabel("Spot Price")
     ax1.set_ylabel("Volatility")
@@ -86,7 +86,7 @@ with col1:
 with col2:
     st.markdown("#### Put Price Heatmap")
     fig2, ax2 = plt.subplots(figsize=(6, 4))
-    im2 = ax2.imshow(put_matrix, cmap="plasma", aspect="auto", extent=extent, origin="lower")
+    im2 = ax2.imshow(put_matrix, cmap="plasma", aspect="auto", extent=extent, origin="upper")
     plt.colorbar(im2, ax=ax2)
     ax2.set_xlabel("Spot Price")
     ax2.set_ylabel("Volatility")
