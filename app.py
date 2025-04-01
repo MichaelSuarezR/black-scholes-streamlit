@@ -55,42 +55,43 @@ col1, col2 = st.columns(2)
 # Plot Call Price Heatmap with Labels
 with col1:
     st.markdown("#### Call Price Heatmap")
-    fig1, ax1 = plt.subplots(figsize=(5, 3.5))  # Adjusted size to match the video proportions
-
-# Show heatmap with real-world axis labels
-im1 = ax1.imshow(call_matrix, cmap="viridis", aspect="auto",
-                 extent=[spot_range[0], spot_range[-1], vol_range[0], vol_range[-1]],
-                 origin="lower")
-
-# Add labels using real coordinates
-x_centers = np.linspace(spot_range[0], spot_range[-1], call_matrix.shape[1])
-y_centers = np.linspace(vol_range[0], vol_range[-1], call_matrix.shape[0])
-for i, y in enumerate(y_centers):
-    for j, x in enumerate(x_centers):
-        ax1.text(x, y, f"{call_matrix[i, j]:.2f}", ha="center", va="center", color="white", fontsize=7)
-
-# Label axes
-ax1.set_xlabel("Spot Price")
-ax1.set_ylabel("Volatility")
-plt.colorbar(im1, ax=ax1)
-st.pyplot(fig1)
+    fig1, ax1 = plt.subplots(figsize=(6, 4))
+    im1 = ax1.imshow(call_matrix, cmap="viridis", aspect="auto",
+                     extent=[spot_range[0], spot_range[-1], vol_range[0], vol_range[-1]],
+                     origin="lower")
+    plt.colorbar(im1, ax=ax1)
+    ax1.set_xlabel("Spot Price")
+    ax1.set_ylabel("Volatility")
+    
+    # Place text labels in each cell
+    # Determine the center of each cell based on grid spacing
+    x_step = (spot_range[-1] - spot_range[0]) / (spot_points - 1)
+    y_step = (vol_range[-1] - vol_range[0]) / (vol_points - 1)
+    
+    for i in range(vol_points):
+        for j in range(spot_points):
+            x_center = spot_range[0] + j * x_step
+            y_center = vol_range[0] + i * y_step
+            ax1.text(x_center, y_center, f"{call_matrix[i, j]:.2f}",
+                     ha="center", va="center", color="white", fontsize=8)
+    st.pyplot(fig1)
 
 # Plot Put Price Heatmap with Labels
 with col2:
     st.markdown("#### Put Price Heatmap")
-    fig2, ax2 = plt.subplots(figsize=(5, 3.5))
-
-im2 = ax2.imshow(put_matrix, cmap="plasma", aspect="auto",
-                 extent=[spot_range[0], spot_range[-1], vol_range[0], vol_range[-1]],
-                 origin="lower")
-
-x_centers = np.linspace(spot_range[0], spot_range[-1], put_matrix.shape[1])
-y_centers = np.linspace(vol_range[0], vol_range[-1], put_matrix.shape[0])
-for i, y in enumerate(y_centers):
-    for j, x in enumerate(x_centers):
-        ax2.text(x, y, f"{put_matrix[i, j]:.2f}", ha="center", va="center", color="white", fontsize=7)
-
-ax2.set_xlabel("Spot Price")
-ax2.set_ylabel("Volatility")
-plt.colorbar(im2, ax=ax2)
-st.pyplot(fig2)
+    fig2, ax2 = plt.subplots(figsize=(6, 4))
+    im2 = ax2.imshow(put_matrix, cmap="plasma", aspect="auto",
+                     extent=[spot_range[0], spot_range[-1], vol_range[0], vol_range[-1]],
+                     origin="lower")
+    plt.colorbar(im2, ax=ax2)
+    ax2.set_xlabel("Spot Price")
+    ax2.set_ylabel("Volatility")
+    
+    # Place text labels in each cell
+    for i in range(vol_points):
+        for j in range(spot_points):
+            x_center = spot_range[0] + j * x_step
+            y_center = vol_range[0] + i * y_step
+            ax2.text(x_center, y_center, f"{put_matrix[i, j]:.2f}",
+                     ha="center", va="center", color="white", fontsize=8)
+    st.pyplot(fig2)
