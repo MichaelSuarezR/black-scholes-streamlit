@@ -38,8 +38,8 @@ V_min = st.sidebar.slider("Min Volatility for Heatmap", 0.01, 1.0, 0.1)
 V_max = st.sidebar.slider("Max Volatility for Heatmap", 0.01, 1.0, 0.5)
 
 # Create grids
-spot_range = np.linspace(S_min, S_max, 20)
-vol_range = np.linspace(V_min, V_max, 20)
+spot_range = np.linspace(S_min, S_max, 10)
+vol_range = np.linspace(V_min, V_max, 10)
 call_matrix = np.zeros((len(vol_range), len(spot_range)))
 put_matrix = np.zeros((len(vol_range), len(spot_range)))
 
@@ -53,12 +53,19 @@ col1, col2 = st.columns(2)
 with col1:
     st.markdown("#### Call Price Heatmap")
     fig1, ax1 = plt.subplots()
-    c = ax1.imshow(call_matrix, cmap="viridis", aspect="auto",
-                   extent=[spot_range[0], spot_range[-1], vol_range[0], vol_range[-1]],
-                   origin="lower")
-    plt.colorbar(c, ax=ax1)
-    ax1.set_xlabel("Spot Price")
-    ax1.set_ylabel("Volatility")
+c = ax1.imshow(call_matrix, cmap="viridis", aspect="auto",
+               extent=[spot_range[0], spot_range[-1], vol_range[0], vol_range[-1]],
+               origin="lower")
+
+plt.colorbar(c, ax=ax1)
+ax1.set_xlabel("Spot Price")
+ax1.set_ylabel("Volatility")
+
+# Add text values on heatmap
+for i in range(len(vol_range)):
+    for j in range(len(spot_range)):
+        ax1.text(spot_range[j], vol_range[i], f"{call_matrix[i, j]:.2f}",
+                 ha="center", va="center", color="white", fontsize=6)
     st.pyplot(fig1)
 
 with col2:
