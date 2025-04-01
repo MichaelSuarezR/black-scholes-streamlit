@@ -56,42 +56,40 @@ col1, col2 = st.columns(2)
 with col1:
     st.markdown("#### Call Price Heatmap")
     fig1, ax1 = plt.subplots(figsize=(6, 4))
-    im1 = ax1.imshow(call_matrix, cmap="viridis", aspect="auto",
-                     extent=[spot_range[0], spot_range[-1], vol_range[0], vol_range[-1]],
-                     origin="lower")
-    plt.colorbar(im1, ax=ax1)
-    ax1.set_xlabel("Spot Price")
-    ax1.set_ylabel("Volatility")
-    
-    # Place text labels in each cell
-    # Determine the center of each cell based on grid spacing
-    x_step = (spot_range[-1] - spot_range[0]) / (spot_points - 1)
-    y_step = (vol_range[-1] - vol_range[0]) / (vol_points - 1)
-    
-    for i in range(vol_points):
-        for j in range(spot_points):
-            x_center = spot_range[0] + j * x_step
-            y_center = vol_range[0] + i * y_step
-            ax1.text(x_center, y_center, f"{call_matrix[i, j]:.2f}",
-                     ha="center", va="center", color="white", fontsize=8)
-    st.pyplot(fig1)
+im1 = ax1.imshow(call_matrix, cmap="viridis")
+
+# Add text annotations centered on each square
+for i in range(call_matrix.shape[0]):
+    for j in range(call_matrix.shape[1]):
+        value = call_matrix[i, j]
+        ax1.text(j, i, f"{value:.2f}", ha="center", va="center", color="white", fontsize=7)
+
+# Formatting
+ax1.set_xticks(np.arange(len(spot_range)))
+ax1.set_yticks(np.arange(len(vol_range)))
+ax1.set_xticklabels([f"{s:.0f}" for s in spot_range])
+ax1.set_yticklabels([f"{v:.2f}" for v in vol_range])
+ax1.set_xlabel("Spot Price")
+ax1.set_ylabel("Volatility")
+plt.colorbar(im1, ax=ax1)
+st.pyplot(fig1)
 
 # Plot Put Price Heatmap with Labels
 with col2:
     st.markdown("#### Put Price Heatmap")
     fig2, ax2 = plt.subplots(figsize=(6, 4))
-    im2 = ax2.imshow(put_matrix, cmap="plasma", aspect="auto",
-                     extent=[spot_range[0], spot_range[-1], vol_range[0], vol_range[-1]],
-                     origin="lower")
-    plt.colorbar(im2, ax=ax2)
-    ax2.set_xlabel("Spot Price")
-    ax2.set_ylabel("Volatility")
-    
-    # Place text labels in each cell
-    for i in range(vol_points):
-        for j in range(spot_points):
-            x_center = spot_range[0] + j * x_step
-            y_center = vol_range[0] + i * y_step
-            ax2.text(x_center, y_center, f"{put_matrix[i, j]:.2f}",
-                     ha="center", va="center", color="white", fontsize=8)
-    st.pyplot(fig2)
+im2 = ax2.imshow(put_matrix, cmap="plasma")
+
+for i in range(put_matrix.shape[0]):
+    for j in range(put_matrix.shape[1]):
+        value = put_matrix[i, j]
+        ax2.text(j, i, f"{value:.2f}", ha="center", va="center", color="white", fontsize=7)
+
+ax2.set_xticks(np.arange(len(spot_range)))
+ax2.set_yticks(np.arange(len(vol_range)))
+ax2.set_xticklabels([f"{s:.0f}" for s in spot_range])
+ax2.set_yticklabels([f"{v:.2f}" for v in vol_range])
+ax2.set_xlabel("Spot Price")
+ax2.set_ylabel("Volatility")
+plt.colorbar(im2, ax=ax2)
+st.pyplot(fig2)
