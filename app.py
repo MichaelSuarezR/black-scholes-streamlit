@@ -40,7 +40,10 @@ r = st.sidebar.number_input("Risk-Free Interest Rate", 0.0, 0.2, 0.05)
 
 call_price, put_price = black_scholes(S, K, T, r, sigma)
 
-st.title("🧠 Black-Scholes Pricing Model")
+st.markdown(
+    "<h1 style='text-align: center; margin-bottom: 0;'>🧠 Black-Scholes Pricing Model</h1>",
+    unsafe_allow_html=True
+)
 
 if T <= 0 or sigma <= 0:
     st.warning("T or σ is zero. Using intrinsic value instead.")
