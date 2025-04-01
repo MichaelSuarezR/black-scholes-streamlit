@@ -55,7 +55,7 @@ col1, col2 = st.columns(2)
 # Plot Call Price Heatmap with Labels
 with col1:
     st.markdown("#### Call Price Heatmap")
-    fig1, ax1 = plt.subplots(figsize=(6, 4))
+    fig1, ax1 = plt.subplots(figsize=(4.5, 3.5))
 im1 = ax1.imshow(call_matrix, cmap="viridis")
 
 # Add text annotations centered on each square
@@ -77,7 +77,7 @@ st.pyplot(fig1)
 # Plot Put Price Heatmap with Labels
 with col2:
     st.markdown("#### Put Price Heatmap")
-    fig2, ax2 = plt.subplots(figsize=(6, 4))
+    fig2, ax2 = plt.subplots(figsize=(4.5, 3.5))
 im2 = ax2.imshow(put_matrix, cmap="plasma")
 
 for i in range(put_matrix.shape[0]):
