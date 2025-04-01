@@ -70,6 +70,11 @@ with col1:
     st.markdown("#### Call Price Heatmap")
     fig1, ax1 = plt.subplots(figsize=(6, 4))
     im1 = ax1.imshow(call_matrix, cmap="viridis", aspect="auto", extent=extent, origin="upper")
+    # Set ticks to match grid centers
+    ax1.set_xticks(spot_range)
+    ax1.set_yticks(vol_range[::-1])  # reversed for top-down axis
+    ax1.set_xticklabels([f"{s:.0f}" for s in spot_range])
+    ax1.set_yticklabels([f"{v:.2f}" for v in vol_range[::-1]])
     plt.colorbar(im1, ax=ax1)
     ax1.set_xlabel("Spot Price")
     ax1.set_ylabel("Volatility")
@@ -87,6 +92,11 @@ with col2:
     st.markdown("#### Put Price Heatmap")
     fig2, ax2 = plt.subplots(figsize=(6, 4))
     im2 = ax2.imshow(put_matrix, cmap="plasma", aspect="auto", extent=extent, origin="upper")
+    # Set ticks to match grid centers
+    ax2.set_xticks(spot_range)
+    ax2.set_yticks(vol_range[::-1])  # reversed for top-down axis
+    ax2.set_xticklabels([f"{s:.0f}" for s in spot_range])
+    ax2.set_yticklabels([f"{v:.2f}" for v in vol_range[::-1]])
     plt.colorbar(im2, ax=ax2)
     ax2.set_xlabel("Spot Price")
     ax2.set_ylabel("Volatility")
