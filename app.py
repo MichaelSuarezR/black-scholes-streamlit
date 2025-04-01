@@ -7,38 +7,6 @@ from scipy.stats import norm
 
 st.set_page_config(page_title="Black-Scholes Model", layout="wide")
 
-st.markdown(
-    """
-    <style>
-    .creator-linkedin {
-        position: absolute;
-        top: 10px;
-        right: 20px;
-        background-color: #1a202c;
-        padding: 10px 15px;
-        border-radius: 8px;
-        color: white;
-        font-size: 14px;
-        z-index: 1000;
-    }
-    .creator-linkedin a {
-        text-decoration: none;
-        background-color: #0077b5;
-        color: white;
-        padding: 5px 10px;
-        border-radius: 5px;
-        margin-left: 10px;
-        font-weight: bold;
-    }
-    </style>
-    <div class="creator-linkedin">
-        Created by: Michael Suarez
-        <a href="https://www.linkedin.com/in/michael-suarez-russell/" target="_blank">LinkedIn</a>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
-
 def black_scholes(S, K, T, r, sigma):
     if T <= 0 or sigma <= 0:
         # Fall back to intrinsic value
@@ -48,6 +16,19 @@ def black_scholes(S, K, T, r, sigma):
     call = S * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2)
     put = K * np.exp(-r * T) * norm.cdf(-d2) - S * norm.cdf(-d1)
     return call, put
+
+st.sidebar.markdown(
+    """
+    <div style="margin-bottom: 15px; padding: 10px; background-color: #1a202c; border-radius: 8px; color: white;">
+        Created by: <strong>Michael Suarez</strong><br>
+        <a href="https://www.linkedin.com/in/michael-suarez-russell/" target="_blank"
+           style="color: white; background-color: #0077b5; padding: 4px 10px; border-radius: 5px; text-decoration: none; display: inline-block; margin-top: 5px;">
+           LinkedIn
+        </a>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 st.sidebar.title("📊 Black-Scholes Model")
 
