@@ -20,7 +20,7 @@ def black_scholes(S, K, T, r, sigma):
 st.sidebar.markdown(
     """
     <div style="margin-bottom: 15px; padding: 10px; background-color: #1a202c; border-radius: 8px; color: white;">
-        Created by: <strong>Michael Suarez</strong><br>
+        Created by: <strong>Michael Suarez-Russell</strong><br>
         <a href="https://www.linkedin.com/in/michael-suarez-russell/" target="_blank"
            style="color: white; background-color: #0077b5; padding: 4px 10px; border-radius: 5px; text-decoration: none; display: inline-block; margin-top: 5px;">
            LinkedIn
