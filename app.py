@@ -55,20 +55,21 @@ col1, col2 = st.columns(2)
 # Plot Call Price Heatmap with Labels
 with col1:
     st.markdown("#### Call Price Heatmap")
-    fig1, ax1 = plt.subplots(figsize=(4.5, 3.5))
-im1 = ax1.imshow(call_matrix, cmap="viridis")
+    fig1, ax1 = plt.subplots(figsize=(5, 3.5))  # Adjusted size to match the video proportions
 
-# Add text annotations centered on each square
-for i in range(call_matrix.shape[0]):
-    for j in range(call_matrix.shape[1]):
-        value = call_matrix[i, j]
-        ax1.text(j, i, f"{value:.2f}", ha="center", va="center", color="white", fontsize=7)
+# Show heatmap with real-world axis labels
+im1 = ax1.imshow(call_matrix, cmap="viridis", aspect="auto",
+                 extent=[spot_range[0], spot_range[-1], vol_range[0], vol_range[-1]],
+                 origin="lower")
 
-# Formatting
-ax1.set_xticks(np.arange(len(spot_range)))
-ax1.set_yticks(np.arange(len(vol_range)))
-ax1.set_xticklabels([f"{s:.0f}" for s in spot_range])
-ax1.set_yticklabels([f"{v:.2f}" for v in vol_range])
+# Add labels using real coordinates
+x_centers = np.linspace(spot_range[0], spot_range[-1], call_matrix.shape[1])
+y_centers = np.linspace(vol_range[0], vol_range[-1], call_matrix.shape[0])
+for i, y in enumerate(y_centers):
+    for j, x in enumerate(x_centers):
+        ax1.text(x, y, f"{call_matrix[i, j]:.2f}", ha="center", va="center", color="white", fontsize=7)
+
+# Label axes
 ax1.set_xlabel("Spot Price")
 ax1.set_ylabel("Volatility")
 plt.colorbar(im1, ax=ax1)
@@ -77,18 +78,18 @@ st.pyplot(fig1)
 # Plot Put Price Heatmap with Labels
 with col2:
     st.markdown("#### Put Price Heatmap")
-    fig2, ax2 = plt.subplots(figsize=(4.5, 3.5))
-im2 = ax2.imshow(put_matrix, cmap="plasma")
+    fig2, ax2 = plt.subplots(figsize=(5, 3.5))
 
-for i in range(put_matrix.shape[0]):
-    for j in range(put_matrix.shape[1]):
-        value = put_matrix[i, j]
-        ax2.text(j, i, f"{value:.2f}", ha="center", va="center", color="white", fontsize=7)
+im2 = ax2.imshow(put_matrix, cmap="plasma", aspect="auto",
+                 extent=[spot_range[0], spot_range[-1], vol_range[0], vol_range[-1]],
+                 origin="lower")
 
-ax2.set_xticks(np.arange(len(spot_range)))
-ax2.set_yticks(np.arange(len(vol_range)))
-ax2.set_xticklabels([f"{s:.0f}" for s in spot_range])
-ax2.set_yticklabels([f"{v:.2f}" for v in vol_range])
+x_centers = np.linspace(spot_range[0], spot_range[-1], put_matrix.shape[1])
+y_centers = np.linspace(vol_range[0], vol_range[-1], put_matrix.shape[0])
+for i, y in enumerate(y_centers):
+    for j, x in enumerate(x_centers):
+        ax2.text(x, y, f"{put_matrix[i, j]:.2f}", ha="center", va="center", color="white", fontsize=7)
+
 ax2.set_xlabel("Spot Price")
 ax2.set_ylabel("Volatility")
 plt.colorbar(im2, ax=ax2)
