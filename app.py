@@ -14,7 +14,7 @@ def black_scholes(S, K, T, r, sigma):
 
 st.sidebar.title("📊 Black-Scholes Model")
 
-# Inputs
+# Primary Inputs
 S = st.sidebar.number_input("Current Asset Price", 50.0, 200.0, 100.0)
 K = st.sidebar.number_input("Strike Price", 50.0, 200.0, 100.0)
 T = st.sidebar.number_input("Time to Maturity (Years)", 0.1, 5.0, 1.0)
@@ -30,51 +30,68 @@ st.markdown(f"**Put Value:** ${put_price:.2f}")
 st.markdown("---")
 st.subheader("🎯 Options Price - Interactive Heatmap")
 
-# Heatmap inputs
+# Heatmap Parameters (lower resolution for clarity)
 st.sidebar.subheader("Heatmap Parameters")
-S_min = st.sidebar.number_input("Min Spot Price", 0.5*S, S, 0.8*S)
-S_max = st.sidebar.number_input("Max Spot Price", S, 1.5*S, 1.2*S)
+S_min = st.sidebar.number_input("Min Spot Price", 0.5 * S, S, 0.8 * S)
+S_max = st.sidebar.number_input("Max Spot Price", S, 1.5 * S, 1.2 * S)
 V_min = st.sidebar.slider("Min Volatility for Heatmap", 0.01, 1.0, 0.1)
 V_max = st.sidebar.slider("Max Volatility for Heatmap", 0.01, 1.0, 0.5)
 
-# Create grids
-spot_range = np.linspace(S_min, S_max, 10)
-vol_range = np.linspace(V_min, V_max, 10)
-call_matrix = np.zeros((len(vol_range), len(spot_range)))
-put_matrix = np.zeros((len(vol_range), len(spot_range)))
+# Create lower resolution grids
+spot_points = 10  # try 10 points for clarity
+vol_points = 10
+spot_range = np.linspace(S_min, S_max, spot_points)
+vol_range = np.linspace(V_min, V_max, vol_points)
+call_matrix = np.zeros((vol_points, spot_points))
+put_matrix = np.zeros((vol_points, spot_points))
 
 for i, v in enumerate(vol_range):
     for j, s in enumerate(spot_range):
         call_matrix[i, j], put_matrix[i, j] = black_scholes(s, K, T, r, v)
 
-# Plotting
+# Use Streamlit columns for side-by-side plots
 col1, col2 = st.columns(2)
 
+# Plot Call Price Heatmap with Labels
 with col1:
     st.markdown("#### Call Price Heatmap")
-    fig1, ax1 = plt.subplots()
-c = ax1.imshow(call_matrix, cmap="viridis", aspect="auto",
-               extent=[spot_range[0], spot_range[-1], vol_range[0], vol_range[-1]],
-               origin="lower")
-
-plt.colorbar(c, ax=ax1)
-ax1.set_xlabel("Spot Price")
-ax1.set_ylabel("Volatility")
-
-# Add text values on heatmap
-for i in range(len(vol_range)):
-    for j in range(len(spot_range)):
-        ax1.text(spot_range[j], vol_range[i], f"{call_matrix[i, j]:.2f}",
-                 ha="center", va="center", color="white", fontsize=6)
+    fig1, ax1 = plt.subplots(figsize=(6, 4))
+    im1 = ax1.imshow(call_matrix, cmap="viridis", aspect="auto",
+                     extent=[spot_range[0], spot_range[-1], vol_range[0], vol_range[-1]],
+                     origin="lower")
+    plt.colorbar(im1, ax=ax1)
+    ax1.set_xlabel("Spot Price")
+    ax1.set_ylabel("Volatility")
+    
+    # Place text labels in each cell
+    # Determine the center of each cell based on grid spacing
+    x_step = (spot_range[-1] - spot_range[0]) / (spot_points - 1)
+    y_step = (vol_range[-1] - vol_range[0]) / (vol_points - 1)
+    
+    for i in range(vol_points):
+        for j in range(spot_points):
+            x_center = spot_range[0] + j * x_step
+            y_center = vol_range[0] + i * y_step
+            ax1.text(x_center, y_center, f"{call_matrix[i, j]:.2f}",
+                     ha="center", va="center", color="white", fontsize=8)
     st.pyplot(fig1)
 
+# Plot Put Price Heatmap with Labels
 with col2:
     st.markdown("#### Put Price Heatmap")
-    fig2, ax2 = plt.subplots()
-    c = ax2.imshow(put_matrix, cmap="plasma", aspect="auto",
-                   extent=[spot_range[0], spot_range[-1], vol_range[0], vol_range[-1]],
-                   origin="lower")
-    plt.colorbar(c, ax=ax2)
+    fig2, ax2 = plt.subplots(figsize=(6, 4))
+    im2 = ax2.imshow(put_matrix, cmap="plasma", aspect="auto",
+                     extent=[spot_range[0], spot_range[-1], vol_range[0], vol_range[-1]],
+                     origin="lower")
+    plt.colorbar(im2, ax=ax2)
     ax2.set_xlabel("Spot Price")
     ax2.set_ylabel("Volatility")
+    
+    # Place text labels in each cell
+    for i in range(vol_points):
+        for j in range(spot_points):
+            x_center = spot_range[0] + j * x_step
+            y_center = vol_range[0] + i * y_step
+            ax2.text(x_center, y_center, f"{put_matrix[i, j]:.2f}",
+                     ha="center", va="center", color="white", fontsize=8)
     st.pyplot(fig2)
